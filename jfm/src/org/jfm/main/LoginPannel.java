@@ -21,6 +21,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import edu.asu.ser335.jfm.RolesSingleton;
+import edu.asu.ser335.jfm.UsersSingleton;
+
+import java.util.Map;
 
 /**
  * @author Nikhil Hiremath
@@ -148,10 +151,62 @@ public class LoginPannel extends JFrame implements ActionListener {
 	}
 
 
-	// Login Validation
+	/**
+	 * 
+	 * validates the user credentials. If valid returns true else returns false.
+	 * 
+	 * @param uName
+	 * @param pwd
+	 * @param role
+	 * @return
+	 * 
+	 */
 	public boolean validateUser(String uName, String pwd, String role) {
 		
-		// SER335 TODO: Implement your validation code here.
+		/*
+		 * Check if the user is valid or not. If valid return true else return
+		 * false.
+		 */
+		Map<String, String> userRoleMap = null;
+
+		try
+			{
+			userRoleMap = UsersSingleton.getUserRoleMapping();
+			}
+		catch( Exception e )
+			{
+			System.out.println("Error in getting userRoleMap");
+			}
+
+		/**
+		 * Validate the user list
+		 */
+		if( userRoleMap == null )
+			{
+			System.out.println("userRoleMap is null");
+			return false;
+			}
+
+		/**
+		 * Ensure that the user role mapping is
+		 * in this list
+		 */
+		if( !userRoleMap.containsKey( uName ) )
+			{
+			System.out.println("userRoleMap does not contain " + uName);
+			return false;
+			}
+
+		/**
+		 * Ensure that the user role mapping is
+		 * in this list
+		 */
+		if( !userRoleMap.get( uName ).equals( role ) )
+			{
+			System.out.println("userRoleMap does not contain " + uName);
+
+			return false;
+			}
 
 		return true;
 	}

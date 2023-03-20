@@ -33,10 +33,20 @@ public final class SaltsSingleton {
 	private static final Hashtable<String, String> userSaltsMapping = new Hashtable<String, String>();
 	private static SaltsSingleton theSalts = null;
 	
+	/**
+	 * Constructor is private. This is a singleton class.
+	 * @throws Exception
+	 */
 	private SaltsSingleton() throws Exception {
 		SaltsSingleton.loadSalts();
 	}
 	
+	/**
+	 * Singleton class should be accessed through this method. This will call the
+	 * default constructor if theSalts has not yet been defined.
+	 * @return
+	 * @throws Exception
+	 */
 	public static final SaltsSingleton getUserSalts() throws Exception {
 		if (SaltsSingleton.theSalts == null) {
 			theSalts = new SaltsSingleton();
@@ -44,10 +54,22 @@ public final class SaltsSingleton {
 		return theSalts;
 	}
 	
+	/*
+	 * Get the salt for a given user. 
+	 */
 	public final String getUserSalt(String user) {
 		return userSaltsMapping.get(user);
 	}
 	
+	/**
+	 * Creates the salted password for a given user and password. This method will
+	 * generate a random salt and store it in the userSaltsMapping. It will also
+	 * add the salt to the salts.json file.
+	 * @param userName
+	 * @param password
+	 * @return
+	 * @throws Exception
+	 */
 	public final String createSaltedPassword(String userName, String password) throws Exception {
 		List<Salt> salts;
 		
@@ -85,7 +107,10 @@ public final class SaltsSingleton {
 		return Long.toString(salted_password);
 	}
 	
-	// load salts.json and create userSaltMapping.
+	/**
+	 * Loads the salts from the salts.json file into the userSaltsMapping.
+	 * @throws Exception
+	 */
 	private static void loadSalts() throws Exception {
 		List<Salt> userSalts;
 		try {

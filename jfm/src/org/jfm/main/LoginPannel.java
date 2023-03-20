@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 
 import edu.asu.ser335.jfm.RolesSingleton;
 import edu.asu.ser335.jfm.UsersSingleton;
+import edu.asu.ser335.jfm.SaltsSingleton;
 
 import java.util.Map;
 
@@ -205,6 +206,28 @@ public class LoginPannel extends JFrame implements ActionListener {
 			{
 			System.out.println("userRoleMap does not contain " + uName);
 
+			return false;
+			}
+
+		/*
+		 * Otherwise the user mapping must exist. Go ahead and
+		 * verify the generated salted password against the password
+		 * stored int he appropriate singleton. 
+		 */
+		String userSalt = SaltsSingleton.getUserSalt( uName );
+
+		if( userSalt == null )
+			{
+			System.out.println("userSalt is null");
+			return false;
+			}
+
+		/**
+		 * check the provided password against the stored password
+		 */
+		if( !( userSalt.equals( pwd ) ) )
+			{
+			System.out.println("password is incorrect");
 			return false;
 			}
 

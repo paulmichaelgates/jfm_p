@@ -57,7 +57,7 @@ public final class SaltsSingleton {
 	/*
 	 * Get the salt for a given user. 
 	 */
-	public final String getUserSalt(String user) {
+	public static final String getUserSalt(String user) {
 		return userSaltsMapping.get(user);
 	}
 	

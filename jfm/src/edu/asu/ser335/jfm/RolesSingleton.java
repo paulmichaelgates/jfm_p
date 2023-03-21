@@ -41,7 +41,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public final class RolesSingleton {
 	private static Hashtable<String, String[]> rolePrivilegesMapping = new Hashtable<String, String[]>();
 	private static RolesSingleton theRoles = null;
-	
+
 	/*
 	 * This should be used if there are no roles already
 	 * defined
@@ -49,7 +49,7 @@ public final class RolesSingleton {
 	private RolesSingleton() {
 		RolesSingleton.loadRoles();
 	}
-	
+
 	/*
 	 * User of this class should call this method to get the
 	 * singleton instance of the RolesSingleton class. This

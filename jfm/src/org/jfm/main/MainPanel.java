@@ -1,6 +1,11 @@
 package org.jfm.main;
 
 import java.awt.BorderLayout;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 import java.util.prefs.Preferences;
 
@@ -142,36 +147,42 @@ public class MainPanel extends JPanel {
 	Vector<JButton> buttons = new Vector<JButton>();
 
 	JButton f3Button = new JButton("View (F3)");
+
 	ViewFileAction view = new ViewFileAction();
 	f3Button.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F3"), "viewButton");
 	f3Button.getActionMap().put("viewButton", view);
 	f3Button.addActionListener(view);
 
 	JButton f4Button = new JButton("Edit (F4)");
+
 	EditFileAction edit = new EditFileAction();
 	f4Button.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F4"), "editButton");
 	f4Button.getActionMap().put("editButton", edit);
 	f4Button.addActionListener(edit);
 
 	JButton f5Button = new JButton("Copy (F5)");
+
 	CopyAction copy = new CopyAction();
 	f5Button.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F5"), "copyButton");
 	f5Button.getActionMap().put("copyButton", copy);
 	f5Button.addActionListener(copy);
 
 	JButton f6Button = new JButton("Move (F6)");
+
 	MoveAction move = new MoveAction();
 	f6Button.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F6"), "moveButton");
 	f6Button.getActionMap().put("moveButton", move);
 	f6Button.addActionListener(move);
 
 	JButton f7Button = new JButton("Mkdir (F7)");
+
 	MkdirAction mkdir = new MkdirAction();
 	f7Button.getInputMap(WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("F7"), "mkdirButton");
 	f7Button.getActionMap().put("mkdirButton", mkdir);
 	f7Button.addActionListener(mkdir);
 
 	JButton addNewUser = new JButton("Add User");
+
 	AddUserAction addUser = new AddUserAction();
 	addNewUser.addActionListener(addUser);
 
@@ -185,17 +196,11 @@ public class MainPanel extends JPanel {
 	LogOutAction logout=new LogOutAction();
 	logoutButton.addActionListener(logout);
 
-	String[] rpm = RolesSingleton.getRoleMapping().getPrivilegesForRole(userRole); 
+	/**
+	 * Add the appropriate buttons given the user's current permissions
+	 */
+	String[] rpm = RolesSingleton.getRoleMapping().getPrivilegesForRole( userRole ); 
 
-	// SER335: You need to figure out uner what roles to allow these buttons to be added
-	// You can comment each line out if you like and see how the UI changes.
-	/*
-	    buttons.addElement(f3Button); //View Button			
-	    buttons.addElement(f4Button); //Edit Button
-	    buttons.addElement(f5Button); //Copy Button
-	    buttons.addElement(f6Button); //Move Button
-	    buttons.addElement(f7Button); //Mkdir Button
-	*/
 	for (int i = 0; rpm != null && i < rpm.length; i++) {
 	    System.out.println("Privileges for " + userRole + " role: " + rpm[i] + i);
 			
@@ -203,11 +208,38 @@ public class MainPanel extends JPanel {
 	    if (rpm[i].equals(CommonConstants.ADDUSER_ACTION)) {
 		buttons.addElement(addNewUser);
 	    }
+
+		//Edit
+		if (rpm[i].equals(CommonConstants.EDIT_ACTION)) {
+			buttons.addElement(f4Button);
+		}
+
+		//Copy
+		if (rpm[i].equals(CommonConstants.COPY_ACTION)) {
+			buttons.addElement(f5Button);
+		}
+
+		//Move
+		if (rpm[i].equals(CommonConstants.MOVE_ACTION)) {
+			buttons.addElement(f6Button);
+		}
+
+		//Mkdir
+		if (rpm[i].equals(CommonConstants.MKDIR_ACTION)) {
+			buttons.addElement(f7Button);
+		}
+
+		//View
+		if (rpm[i].equals(CommonConstants.VIEW_ACTION)) {
+			buttons.addElement(f3Button);
+		}
+
 	}		
 	buttons.addElement(f10Button);    //Quit Button, for everyone
 	buttons.addElement(logoutButton); //Logout Button, for everyone
 	
 	// above declared buttons are set to button pannel
-	btPanel.setButtons(buttons);
+	btPanel.setButtons( buttons );
     }
+
 }

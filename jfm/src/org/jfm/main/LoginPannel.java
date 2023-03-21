@@ -223,14 +223,14 @@ public class LoginPannel extends JFrame implements ActionListener {
 			return false;
 			}
 
-		long salted_password = SipHasher.hash(userSalt.getBytes(), pwd.getBytes());
-			
-		System.out.println(salted_password);
-		/*
-		 * Get the password from the appropriate singleton
+		/**
+		 * Validate the password. Returns true if valid
+		 * false otherwise.
 		 */
-
-
-		return true;
+		return UsersSingleton.validateUserPassword
+				(
+				SipHasher.hash( userSalt.getBytes(), pwd.getBytes() ), 
+				uName
+				);
 	}
 }

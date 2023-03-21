@@ -56,6 +56,48 @@ public final class UsersSingleton {
 		return Collections.unmodifiableMap(userPasswordMapping);
 	}
 
+	/**
+	 * Validate a salted password given the user name.
+	 * @param salted_password
+	 * @param user_name
+	 * @return
+	 */
+	public static final boolean validateUserPassword(long salted_password, String user_name )
+	{
+		/**
+		 * Look up the password for the given user name.
+		 * If the provided salted password is not the same
+		 * then return false. Otherwise return true.
+		 */
+		String password = UsersSingleton.userPasswordMapping.get( user_name );
+
+		if( password == null )
+			{
+			return false;
+			}
+
+		/**
+		 * Attempt to validate the password.
+		 */
+		try
+			{
+			if( Long.parseLong( password ) == salted_password )
+				{
+				return true;
+				}
+			}
+		/**
+		 * If the password is not a number, then it is not a valid password.
+		 */
+		catch( NumberFormatException e )
+			{
+			return false;
+			}
+
+
+		return false;
+	}
+
 	public static final boolean createPasswordMapping(String userName, String password, String role) throws Exception {
 		boolean rval = true;
 		List<User> users;

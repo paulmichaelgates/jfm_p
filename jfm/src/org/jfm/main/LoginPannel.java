@@ -24,6 +24,8 @@ import edu.asu.ser335.jfm.RolesSingleton;
 import edu.asu.ser335.jfm.UsersSingleton;
 import edu.asu.ser335.jfm.SaltsSingleton;
 
+import io.whitfin.siphash.SipHasher;
+
 import java.util.Map;
 
 /**
@@ -221,14 +223,12 @@ public class LoginPannel extends JFrame implements ActionListener {
 			return false;
 			}
 
-		/**
-		 * check the provided password against the stored password
+		long salted_password = SipHasher.hash(userSalt.getBytes(), pwd.getBytes());
+			
+		System.out.println(salted_password);
+		/*
+		 * Get the password from the appropriate singleton
 		 */
-		if( !( userSalt.equals( pwd ) ) )
-			{
-			System.out.println("password is incorrect");
-			return false;
-			}
 
 
 		return true;

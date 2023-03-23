@@ -37,7 +37,10 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.asu.ser335.jfm.RolesSingleton;
+import edu.asu.ser335.jfm.SaltsSingleton;
 import io.whitfin.siphash.SipHasher;
+import edu.asu.ser335.jfm.UsersSingleton;
+
 
 /**
  * @author Nikhil Hiremath
@@ -123,16 +126,83 @@ public class ChangePasswordPannel extends JFrame implements ActionListener {
 		setLocationRelativeTo(null);
 	}
 	
+	/**
+	 * Attempts to update the password for the user
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		// just for fun check that the underlying text fields have
+		// been initialized
+		if( textUsername == null || fieldPassword == null || roleList == null )
+			{
+			JOptionPane.showMessageDialog(this, "Error initializing text fields", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+			}
+
 		String userName = textUsername.getText();
 		// String userName = (String) roleList.getSelectedItem();
 		String password = String.valueOf(fieldPassword.getPassword());
+		
 		String role = (String) roleList.getSelectedItem();
 		
-		// TODO: for you to complete!
-		JOptionPane.showMessageDialog(null, "NOT IMPLEMENETD YET!!");
+		// check if the username and password fields are empty
+		if (userName.trim().isEmpty() || password.trim().isEmpty()) {
+			JOptionPane.showMessageDialog(this, "Username or Password cannot be empty", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 
+		// check if the user exists 
+		try
+			{
+			if ( !( UsersSingleton.getUserRoleMapping().containsKey( userName ) ) )
+				{
+				// show a nice error message to the user
+				JOptionPane.showMessageDialog(this, "User already exists", "Error",
+						JOptionPane.ERROR_MESSAGE);
+
+				return;
+				}
+			// ensure that the selected role matches what is in the user role mapping
+			// from the user singleton
+			if( !UsersSingleton.getUserRoleMapping().get( userName ).equals( role ) )
+				{
+				// show a nice error message to the user
+				JOptionPane.showMessageDialog(this, "Role does not match user", "Error",
+						JOptionPane.ERROR_MESSAGE);
+
+				return;
+				}
+			}
+		catch( Exception ex )
+			{
+			JOptionPane.showMessageDialog(this, "User does not exist", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			}
+
+		// if we made it here then the user exists, go ahead and generate a new password
+		// for the user
+		try
+			{
+			String salted_password = SaltsSingleton.createSaltedPassword( userName, password );
+
+			// debug print the salted password
+			System.out.println( "Salted password: " + salted_password );
+			
+			UsersSingleton.updatePassword( salted_password, userName );
+			}
+		catch( Exception ex )
+			{
+			ex.printStackTrace();
+
+			// give a nice error message to the user
+			JOptionPane.showMessageDialog(this, "Error updating password", "Error",
+					JOptionPane.ERROR_MESSAGE);
+			}
+
+		
+		
 	}
 
 }

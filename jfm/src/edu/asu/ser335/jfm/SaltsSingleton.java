@@ -70,7 +70,7 @@ public final class SaltsSingleton {
 	 * @return
 	 * @throws Exception
 	 */
-	public final String createSaltedPassword(String userName, String password) throws Exception {
+	public final static String createSaltedPassword(String userName, String password) throws Exception {
 		List<Salt> salts;
 		
 		// Generate the random salt

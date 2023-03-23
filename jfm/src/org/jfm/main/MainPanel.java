@@ -22,6 +22,7 @@ import org.jfm.event.ChangeViewEvent;
 import org.jfm.event.ChangeViewListener;
 import org.jfm.po.AddUserAction;
 import org.jfm.po.ButtonsPanel;
+import org.jfm.po.ChangePasswordAction;
 
 import org.jfm.po.CopyAction;
 import org.jfm.po.EditFileAction;
@@ -196,6 +197,10 @@ public class MainPanel extends JPanel {
 	LogOutAction logout=new LogOutAction();
 	logoutButton.addActionListener(logout);
 
+	JButton changePasswordButton = new JButton("Change Password");
+	ChangePasswordAction changePassword = new ChangePasswordAction();
+	changePasswordButton.addActionListener(changePassword);
+
 	/**
 	 * Add the appropriate buttons given the user's current permissions
 	 */
@@ -232,6 +237,11 @@ public class MainPanel extends JPanel {
 		//View
 		if (rpm[i].equals(CommonConstants.VIEW_ACTION)) {
 			buttons.addElement(f3Button);
+		}
+
+		// Change Password
+		if (rpm[i].equals(CommonConstants.CHANGE_PASSWORD_ACTION)) {
+			buttons.addElement(changePasswordButton);
 		}
 
 	}		

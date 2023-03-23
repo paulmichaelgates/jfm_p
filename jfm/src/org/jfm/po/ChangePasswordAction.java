@@ -43,6 +43,9 @@ public class ChangePasswordAction extends JFrame implements ActionListener {
 	public void removePropertyChangeListener(PropertyChangeListener listener) {
 	}
 
+	/**
+	 * shows the Change Password Screen to the user
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 

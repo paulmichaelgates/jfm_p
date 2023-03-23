@@ -21,6 +21,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.util.ArrayList;
+
 /**
  * @author kevinagary
  *
@@ -172,5 +174,56 @@ public final class UsersSingleton {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	// update the password
+	public static final boolean updatePassword( String password, String username )
+	{
+	// make sure that the user password mapping exists
+	if( UsersSingleton.userPasswordMapping == null )
+		{
+		try
+			{
+			loadUsers();
+			}
+		catch( Exception e )
+			{
+			e.printStackTrace();
+			return false;
+			}
+		}
+
+	// make sure that the user exists
+	if( !UsersSingleton.userPasswordMapping.containsKey( username ) )
+		{
+		return false;
+		}
+
+	// update the password for this user to the new one provided
+	UsersSingleton.userPasswordMapping.put( username, password );
+
+	// write this out to the authentication.json file
+	try
+		{
+		ObjectMapper mapper = new ObjectMapper();
+		List<User> users = new ArrayList<User>();
+		for( String user : UsersSingleton.userPasswordMapping.keySet() )
+			{
+			User u = new User();
+			u.setName( user );
+			u.setPassword( UsersSingleton.userPasswordMapping.get( user ) );
+			u.setRole( UsersSingleton.userRoleMapping.get( user ) );
+			users.add( u );
+			}
+		mapper.writeValue( new File( CommonConstants.AUTHENTICATION_FILE ), users );
+		}
+	catch( Exception e )
+		{
+		e.printStackTrace();
+		return false;
+		}
+
+	// return true to indicate that the password was updated
+	return true;
 	}
 }

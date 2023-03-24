@@ -202,6 +202,9 @@ public final class UsersSingleton {
 	// update the password for this user to the new one provided
 	UsersSingleton.userPasswordMapping.put( username, password );
 
+	// dump the new list contents to the console
+	System.out.println( "UsersSingleton.userPasswordMapping: " + UsersSingleton.userPasswordMapping );
+
 	// write this out to the authentication.json file
 	try
 		{
